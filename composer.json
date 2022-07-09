@@ -1,16 +1,19 @@
 {
-    "name": "maileryio/_____",
+    "name": "maileryio/mailery-messenger",
     "type": "library",
-    "description": "_____",
+    "description": "Messenger module for Mailery Platform",
     "keywords": [
-        "_____"
+        "mail",
+        "mailer",
+        "mailinig",
+        "messenger"
     ],
-    "homepage": "https://github.com/maileryio/_____",
+    "homepage": "https://github.com/maileryio/mailery-messenger",
     "license": "BSD-3-Clause",
     "support": {
-        "source": "https://github.com/maileryio/_____",
-        "issues": "https://github.com/maileryio/_____/issues",
-        "wiki": "https://github.com/maileryio/_____/wiki"
+        "source": "https://github.com/maileryio/mailery-messenger",
+        "issues": "https://github.com/maileryio/mailery-messenger/issues",
+        "wiki": "https://github.com/maileryio/mailery-messenger/wiki"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -25,12 +28,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Mailery\\_____\\": "src"
+            "Mailery\\Messenger\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mailery\\_____\\Tests\\": "tests"
+            "Mailery\\Messenger\\Tests\\": "tests"
         }
     },
     "scripts": {
