@@ -22,9 +22,9 @@ class MessengerException extends \RuntimeException
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUserMessage(): string
+    public function getUserMessage(): ?string
     {
         return $this->userMessage;
     }
