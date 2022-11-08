@@ -22,10 +22,10 @@ class Logger implements LoggerInterface
     /**
      * @inheritdoc
      */
-    public function log($level, string|\Stringable $message, array $context = [])
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         $context['category'] = $this->category;
-        return $this->innerLogger->log($level, $message, $context);
+        $this->innerLogger->log($level, $message, $context);
     }
 
 }
