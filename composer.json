@@ -47,7 +47,8 @@
         },
         "config-plugin": {
             "params": "params.php",
-            "common": "common.php"
+            "common": "common.php",
+            "events-console": "events-console.php"
         },
         "config-plugin-options": {
             "source-directory": "config"
