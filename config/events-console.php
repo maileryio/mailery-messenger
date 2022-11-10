@@ -2,10 +2,15 @@
 
 declare(strict_types=1);
 
-use Symfony\Component\Messenger\Event\WorkerMessageHandledEvent;
+use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
+use Symfony\Component\Messenger\EventListener\AddErrorDetailsStampListener;
+use Symfony\Component\Messenger\EventListener\SendFailedMessageForRetryListener;
+use Symfony\Component\Messenger\EventListener\SendFailedMessageToFailureTransportListener;
 
 return [
-    WorkerMessageHandledEvent::class => static function () {
-        var_dump('WorkerMessageHandledEvent');exit;
-    },
+    WorkerMessageFailedEvent::class => [
+        [AddErrorDetailsStampListener::class, 'onMessageFailed'],
+        [SendFailedMessageForRetryListener::class, 'onMessageFailed'],
+        [SendFailedMessageToFailureTransportListener::class, 'onMessageFailed'],
+    ],
 ];

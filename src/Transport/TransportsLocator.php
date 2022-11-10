@@ -1,6 +1,6 @@
 <?php
 
-namespace Mailery\Messenger\Transports;
+namespace Mailery\Messenger\Transport;
 
 use Psr\Container\ContainerInterface;
 
