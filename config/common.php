@@ -8,9 +8,10 @@ use Mailery\Messenger\Transport\TransportsLocator;
 use Mailery\Messenger\Transport\TransportsLocatorInterface;
 use Mailery\Messenger\Transport\FailureTransportsLocator;
 use Mailery\Messenger\Transport\FailureTransportsLocatorInterface;
-use Mailery\Messenger\Logger as MessengerLogger;
+use Mailery\Messenger\Logger;
+use Mailery\Messenger\LoggerInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Symfony\Component\Messenger\Command\ConsumeMessagesCommand;
 use Symfony\Component\Messenger\Command\FailedMessagesShowCommand;
 use Symfony\Component\Messenger\EventListener\SendFailedMessageForRetryListener;
@@ -26,18 +27,18 @@ use Yiisoft\Definitions\DynamicReference;
 use Yiisoft\Definitions\Reference;
 
 return [
-    MessengerLogger::class => [
-        'class' => MessengerLogger::class,
+    LoggerInterface::class => [
+        'class' => Logger::class,
         '__construct()' => [
             'category' => 'messenger',
-            'innerLogger' => Reference::to(LoggerInterface::class),
+            'innerLogger' => Reference::to(PsrLoggerInterface::class),
         ],
     ],
 
     MessageBusInterface::class => [
         'class' => MessageBus::class,
         '__construct()' => [
-            DynamicReference::to(static function (ContainerInterface $container, MessengerLogger $logger) use($params) {
+            DynamicReference::to(static function (ContainerInterface $container, LoggerInterface $logger) use($params) {
                 return (new MiddlewareIteratorAggregate($container, $logger))
                     ->withMiddlewares($params['maileryio/mailery-messenger']['middlewares']);
             }),
@@ -87,9 +88,11 @@ return [
     RetryStrategyLocatorInterface::class => [
         'class' => RetryStrategyLocator::class,
         '__construct()' => [
-            array_map(
-                static fn (array $reciever) => $reciever['retryStrategy'],
-                $params['maileryio/mailery-messenger']['recievers']
+            array_filter(
+                array_map(
+                    static fn (array $reciever) => $reciever['retryStrategy'] ?? null,
+                    $params['maileryio/mailery-messenger']['recievers']
+                )
             ),
         ],
     ],
@@ -99,7 +102,7 @@ return [
         '__construct()' => [
             'sendersLocator' => Reference::to(TransportsLocatorInterface::class),
             'retryStrategyLocator' => Reference::to(RetryStrategyLocatorInterface::class),
-            'logger' => Reference::to(MessengerLogger::class),
+            'logger' => Reference::to(LoggerInterface::class),
         ],
     ],
 
@@ -115,7 +118,7 @@ return [
                     ),
                 ],
             ]),
-            'logger' => Reference::to(MessengerLogger::class),
+            'logger' => Reference::to(LoggerInterface::class),
         ],
     ],
 
@@ -130,7 +133,7 @@ return [
                 ],
             ]),
             'receiverLocator' => Reference::to(TransportsLocatorInterface::class),
-            'logger' => Reference::to(MessengerLogger::class),
+            'logger' => Reference::to(LoggerInterface::class),
         ],
     ],
 

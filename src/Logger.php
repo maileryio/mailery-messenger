@@ -3,7 +3,8 @@
 namespace Mailery\Messenger;
 
 use Psr\Log\LoggerTrait;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
+use Mailery\Messenger\LoggerInterface;
 
 class Logger implements LoggerInterface
 {
@@ -12,11 +13,11 @@ class Logger implements LoggerInterface
 
     /**
      * @param string $category
-     * @param LoggerInterface $innerLogger
+     * @param PsrLoggerInterface $innerLogger
      */
     public function __construct(
         private string $category,
-        private LoggerInterface $innerLogger
+        private PsrLoggerInterface $innerLogger
     ) {}
 
     /**
@@ -26,6 +27,17 @@ class Logger implements LoggerInterface
     {
         $context['category'] = $this->category;
         $this->innerLogger->log($level, $message, $context);
+    }
+
+    /**
+     * @param bool $final
+     * @return void
+     */
+    public function flush(bool $final = false): void
+    {
+        if (method_exists($this->innerLogger, 'flush')) {
+            $this->innerLogger->flush($final);
+        }
     }
 
 }

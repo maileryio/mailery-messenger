@@ -1,5 +1,6 @@
 <?php
 
+use Mailery\Messenger\Middleware\ErrorCatcherMiddleware;
 use Mailery\Messenger\Transport\BeanstalkdTransportFactory;
 use Symfony\Component\Messenger\Command\ConsumeMessagesCommand;
 use Symfony\Component\Messenger\Command\FailedMessagesShowCommand;
@@ -13,6 +14,7 @@ use Yiisoft\Definitions\Reference;
 return [
     'maileryio/mailery-messenger' => [
         'middlewares' => [
+            ErrorCatcherMiddleware::class,
             SendMessageMiddleware::class,
             HandleMessageMiddleware::class,
             FailedMessageProcessingMiddleware::class,
