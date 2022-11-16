@@ -8,6 +8,7 @@ use Symfony\Component\Messenger\Middleware\SendMessageMiddleware;
 use Symfony\Component\Messenger\Middleware\HandleMessageMiddleware;
 use Symfony\Component\Messenger\Middleware\FailedMessageProcessingMiddleware;
 use Symfony\Component\Messenger\Retry\MultiplierRetryStrategy;
+use Symfony\Component\Messenger\Transport\Sync\SyncTransport;
 use Yiisoft\Definitions\DynamicReference;
 use Yiisoft\Definitions\Reference;
 
@@ -22,6 +23,9 @@ return [
         'handlers' => [],
         'senders' => [],
         'recievers' => [
+            'sync' => [
+                'transport' => Reference::to(SyncTransport::class),
+            ],
             'errored' => [
                 'transport' => DynamicReference::to(new BeanstalkdTransportFactory([
                     'tube_name' => 'errored'
